@@ -25,7 +25,7 @@ namespace ApiCatalogo.Context.Controller
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            var categorias = _context.Categorias.ToList();
+            var categorias = _context.Categorias.AsNoTracking().ToList(); // ASNoTracking melhora a performance em consultas somente leitura
 
             if (categorias is null)
             {
