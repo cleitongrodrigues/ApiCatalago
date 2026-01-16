@@ -6,7 +6,7 @@ using System.Linq;
 namespace ApiCatalogo.Context.Controller
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProdutosController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -15,6 +15,21 @@ namespace ApiCatalogo.Context.Controller
         public ProdutosController(AppDbContext context)
         {
             _context = context;
+        }
+
+        //APENAS UM PRODUTO
+        [HttpGet("primeiro")]
+        public ActionResult<Produto> GetPrimeiro()
+        {
+            var produto = _context.Produtos.FirstOrDefault();
+
+            if (produto is null)
+            {
+                // Necessário utilizar o ActionResult para retornar o NotFound
+                return NotFound("Produto não encontrado.");
+            }
+
+            return produto;
         }
 
         [HttpGet]
