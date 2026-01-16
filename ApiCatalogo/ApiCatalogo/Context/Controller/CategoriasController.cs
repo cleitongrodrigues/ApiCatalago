@@ -25,14 +25,22 @@ namespace ApiCatalogo.Context.Controller
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            var categorias = _context.Categorias.AsNoTracking().ToList(); // ASNoTracking melhora a performance em consultas somente leitura
-
-            if (categorias is null)
+            try
             {
-                return NotFound("Categorias não encontradas.");
-            }
+                var categorias = _context.Categorias.AsNoTracking().ToList(); // ASNoTracking melhora a performance em consultas somente leitura
 
-            return categorias;
+                if (categorias is null)
+                {
+                    return NotFound("Categorias não encontradas.");
+                }
+
+                return categorias;
+            }
+            catch(Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ocorreu um problema ao tratar a sua solicitação. Contate o suporte");
+            }
         }
 
         [HttpGet("{id:int}", Name="ObterCategoria")]
