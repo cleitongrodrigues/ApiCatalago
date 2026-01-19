@@ -1,4 +1,5 @@
 ﻿using ApiCatalogo.Models;
+using ApiCatalogo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,16 @@ namespace ApiCatalogo.Context.Controller
             _context = context;
         }
 
-        [HttpGet("produtos")]
-        public ActionResult<IEnumerable<Categoria>> GetCategoriasProduto()
+        [HttpGet("UsandoSemFromServices/{nome}")]
+        public ActionResult<string> GetSaudacaoFromServices(IMeuServico meuServico, string nome)
         {
-            return _context.Categorias.Include(p => p.Produtos).ToList();
+            return meuServico.Saudacao(nome);
+        }
+
+        [HttpGet("produtos")]
+        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoriasProdutoAsync()
+        {
+            return await _context.Categorias.ToListAsync();
         }
 
         [HttpGet]
@@ -44,9 +51,9 @@ namespace ApiCatalogo.Context.Controller
         }
 
         [HttpGet("{id:int}", Name="ObterCategoria")]
-        public ActionResult<Categoria> Get(int id)
+        public async Task<ActionResult<Categoria>> Get(int id)
         {
-            var categorias = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+            var categorias = await _context.Categorias.FirstOrDefaultAsync(c => c.CategoriaId == id);
 
             if (categorias is null)
             {

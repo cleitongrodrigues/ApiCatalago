@@ -1,4 +1,5 @@
 using ApiCatalogo.Context;
+using ApiCatalogo.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -22,6 +23,8 @@ if (string.IsNullOrEmpty(mysqlConnection))
 builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseMySql(mysqlConnection, 
                     ServerVersion.AutoDetect(mysqlConnection)));
+
+builder.Services.AddTransient<IMeuServico, MeuServico>(); // REGISTRO DO SERVIÇO
 
 var app = builder.Build();
 

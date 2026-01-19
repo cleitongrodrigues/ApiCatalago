@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ApiCatalogo.Validations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -10,8 +11,9 @@ namespace ApiCatalogo.Models
         [Key]
         public int ProdutoId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O nome do produto é obrigatório.")]
         [StringLength(80)]
+        [PrimeiraLetraMaiusculaAtribute]
         public string? Nome { get; set; }
 
         [Required]
